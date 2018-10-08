@@ -2,6 +2,8 @@ const path = require('path');
 const webpack = require('webpack');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const theme = require('../package.json').theme;
+
 module.exports = {
     entry: {
         app: './src/index.js'
@@ -63,6 +65,14 @@ module.exports = {
                 'style-loader',
                 'css-loader'
             ]
+        },{
+            test: /\.less$/,
+            use: [
+                'style-loader',
+                'css-loader',
+                {loader: 'less-loader', options: {modifyVars: theme}},
+            ],
+            include: /node_modules/,
         }, {
             test: /\.(png|jpg|gif)$/,
             use: [{
