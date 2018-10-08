@@ -63,16 +63,63 @@ module.exports = {
             test: /\.css$/,
             use: [
                 'style-loader',
-                'css-loader'
+                'css-loader',
+                {
+                    loader: 'postcss-loader',
+                    options: {
+                      ident: 'postcss',
+                      plugins: [
+                        require('postcss-cssnext')(),
+                        require('cssnano')(),
+                        require('postcss-pxtorem')({
+                          rootValue: 100,
+                          propWhiteList: []
+                        })
+                      ]
+                    }
+                }
             ]
         },{
             test: /\.less$/,
             use: [
                 'style-loader',
                 'css-loader',
-                {loader: 'less-loader', options: {modifyVars: theme}},
+                {
+                    loader: 'postcss-loader',
+                    options: {
+                      ident: 'postcss',
+                      plugins: [
+                        require('postcss-cssnext')(),
+                        require('cssnano')(),
+                        require('postcss-pxtorem')({
+                          rootValue: 100,
+                          propWhiteList: []
+                        })
+                      ]
+                    }
+                },
+                {loader: 'less-loader', options: {modifyVars: theme}}
             ],
             include: /node_modules/,
+        },{
+            test: /\.scss$/,
+            use: [
+                'style-loader',
+                'css-loader',
+                {
+                    loader: 'postcss-loader',
+                    options: {
+                      ident: 'postcss',
+                      plugins: [
+                        require('postcss-cssnext')(),
+                        require('cssnano')(),
+                        require('postcss-pxtorem')({
+                          rootValue: 100,
+                          propWhiteList: []
+                        })
+                      ]
+                    }
+                },'sass-loader']
         }, {
             test: /\.(png|jpg|gif)$/,
             use: [{

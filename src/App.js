@@ -1,13 +1,12 @@
 import React from 'react';
-import { Button } from 'antd-mobile';
+import { WingBlank } from 'antd-mobile';
 
 class App extends React.Component{
     render(){
         return (
-        <div>
-            佳佳加油
-            <Button type="primary">primary</Button>
-        </div>
+            <div style={{ padding: '15px 0' }}>
+                <WingBlank size="md"><span>123</span></WingBlank>
+            </div>
         );
     }
 }
