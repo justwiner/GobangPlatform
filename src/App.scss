@@ -1,0 +1,27 @@
+$iconWidth: 30px;
+
+.container {
+    height: 100%;
+    width: 100%;
+}
+
+.menu-icon {
+    width: 32px;
+    height: 32px;
+}
+
+.weather-icon {
+    background: url('./assets/img/weather.svg') center center /  $iconWidth $iconWidth no-repeat
+}
+
+.weather-active-icon {
+    background: url('./assets/img/weather_active.svg') center center /  $iconWidth $iconWidth no-repeat
+}
+
+.map-icon {
+    background: url('./assets/img/map.svg') center center /  $iconWidth $iconWidth no-repeat
+}
+
+.map-active-icon {
+    background: url('./assets/img/map_active.svg') center center /  $iconWidth $iconWidth no-repeat
+}
