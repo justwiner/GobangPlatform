@@ -13,8 +13,8 @@ function calPoint (point, width, spec) {
         y = y - remainDerY
     x = x - (spec / 2 + 1)
     y = y  - (spec / 2 + 1)
-    const mulX = (x / width).toFixed(0)
-    const mulY = (y /width).toFixed(0)
+    const mulX = (x / width).toFixed(0) - 0
+    const mulY = (y /width).toFixed(0) - 0
     return {x,y, index: {mulX, mulY}}
 }
 
@@ -56,7 +56,7 @@ function addChessRecord (chessRecords = [], point) {
     }
 }
 
-function checkWin (chessRecords = [], width, spec) {
+function checkWin (chessRecords = []) {
     const length = chessRecords.length;
     if (length < 9) {
         return {
@@ -71,23 +71,22 @@ function checkWin (chessRecords = [], width, spec) {
         let tempCheckChess = []
         let result = {}
         // 横向判断
-        tempCheckChess = checkChess.filter(e => e.point.index.y === mulY)
-        console.log(tempCheckChess)
-        result = transverseCheck(tempCheckChess, lastChess.type, mulX, width)
+        tempCheckChess = checkChess.filter(e => e.point.index.mulY === mulY)
+        result = transverseCheck(tempCheckChess, lastChess.type, mulX)
         if (result.ifEnd) {
             return result
         }
         // 纵向判断
-        tempCheckChess = checkChess.filter(e => e.point.x === mulX)
-        result = portraitCheck(tempCheckChess, lastChess.type, mulY, width)
+        tempCheckChess = checkChess.filter(e => e.point.index.mulX === mulX)
+        result = portraitCheck(tempCheckChess, lastChess.type, mulY)
         if (result.ifEnd) {
             return result
         }
 
         // 顺时针45度判断
         tempCheckChess = checkChess.filter(e => {
-            const tempX = e.point.x;
-            const tempY = e.point.y;
+            const tempX = e.point.index.mulX;
+            const tempY = e.point.index.mulY;
             const diffrence = mulX - tempX;
             if (tempY === mulY + diffrence) {
                 return true;
@@ -95,15 +94,15 @@ function checkWin (chessRecords = [], width, spec) {
                 return false
             }
         })
-        result = fourtyFiveCheck(tempCheckChess, lastChess.type, mulX, mulY, width)
+        result = fourtyFiveCheck(tempCheckChess, lastChess.type, mulX, mulY)
         if (result.ifEnd) {
             return result
         }
 
         // 顺时针135度判断
         tempCheckChess = checkChess.filter(e => {
-            const tempX = e.point.x;
-            const tempY = e.point.y;
+            const tempX = e.point.index.mulX;
+            const tempY = e.point.index.mulY;
             const diffrence = mulX - tempX;
             if (tempY === mulY - diffrence) {
                 return true;
@@ -111,7 +110,7 @@ function checkWin (chessRecords = [], width, spec) {
                 return false
             }
         })
-        result = oneHundredAndThirtyFiveCheck(tempCheckChess, lastChess.type, mulX, mulY, width)
+        result = oneHundredAndThirtyFiveCheck(tempCheckChess, lastChess.type, mulX, mulY)
         if (result.ifEnd) {
             return result
         }
@@ -124,15 +123,15 @@ function checkWin (chessRecords = [], width, spec) {
     
 }
 
-function transverseCheck (tempCheckChess, type, x, width) {
+function transverseCheck (tempCheckChess, type, mulX) {
     let count = 1;
-    const leftChess = tempCheckChess.filter(e => e.point.x < x).sort((pre, cur) => pre.point.x - cur.point.x);
-    const rightChess = tempCheckChess.filter(e => e.point.x > x).sort((pre, cur) => pre.point.x - cur.point.x);
+    const leftChess = tempCheckChess.filter(e => e.point.index.mulX < mulX).sort((pre, cur) => pre.point.index.mulX - cur.point.index.mulX);
+    const rightChess = tempCheckChess.filter(e => e.point.index.mulX > mulX).sort((pre, cur) => pre.point.index.mulX - cur.point.index.mulX);
     const leftChessLength = leftChess.length;
     const rightChessLength = rightChess.length;
     let num = 1;
     for (let i = leftChessLength - 1; i >= 0; i --) {
-        if (leftChess[i].point.x + num * width === x){
+        if (leftChess[i].point.index.mulX + num === mulX){
             count ++;
             num ++;
         }
@@ -140,7 +139,7 @@ function transverseCheck (tempCheckChess, type, x, width) {
     }
     num = 1;
     for (let i = 0; i < rightChessLength; i ++) {
-        if (rightChess[i].point.x - num * width === x){
+        if (rightChess[i].point.index.mulX - num === mulX){
             count ++
             num ++
         }
@@ -159,15 +158,15 @@ function transverseCheck (tempCheckChess, type, x, width) {
     }
 }
 
-function portraitCheck (tempCheckChess, type, y, width) {
+function portraitCheck (tempCheckChess, type, mulY) {
     let count = 1;
-    const topChess = tempCheckChess.filter(e => e.point.y < y).sort((pre, cur) => pre.point.y - cur.point.y);
-    const bottomChess = tempCheckChess.filter(e => e.point.y > y).sort((pre, cur) => pre.point.y - cur.point.y);
+    const topChess = tempCheckChess.filter(e => e.point.index.mulY < mulY).sort((pre, cur) => pre.point.mulY - cur.point.mulY);
+    const bottomChess = tempCheckChess.filter(e => e.point.index.mulY > mulY).sort((pre, cur) => pre.point.mulY - cur.point.mulY);
     const topChessLength = topChess.length;
     const bottomChessLength = bottomChess.length;
     let num = 1;
     for (let i = topChessLength - 1; i >= 0; i --) {
-        if (topChess[i].point.y + num * width === y){
+        if (topChess[i].point.index.mulY + num === mulY){
             count ++;
             num ++;
         }
@@ -175,7 +174,7 @@ function portraitCheck (tempCheckChess, type, y, width) {
     }
     num = 1;
     for (let i = 0; i < bottomChessLength; i ++) {
-        if (bottomChess[i].point.y - num * width === y){
+        if (bottomChess[i].point.index.mulY - num === mulY){
             count ++
             num ++
         }
@@ -194,15 +193,15 @@ function portraitCheck (tempCheckChess, type, y, width) {
     }
 }
 
-function fourtyFiveCheck (tempCheckChess, type, x, y, width) {
+function fourtyFiveCheck (tempCheckChess, type, mulX, mulY) {
     let count = 1;
-    const topChess = tempCheckChess.filter(e => e.point.y < y).sort((pre, cur) => pre.point.y - cur.point.y);
-    const bottomChess = tempCheckChess.filter(e => e.point.y > y).sort((pre, cur) => pre.point.y - cur.point.y);
+    const topChess = tempCheckChess.filter(e => e.point.index.mulY < mulY).sort((pre, cur) => pre.point.index.mulY - cur.point.index.mulY);
+    const bottomChess = tempCheckChess.filter(e => e.point.index.mulY > mulY).sort((pre, cur) => pre.point.index.mulY - cur.point.index.mulY);
     const topChessLength = topChess.length;
     const bottomChessLength = bottomChess.length;
     let num = 1;
     for (let i = topChessLength - 1; i >= 0; i --) {
-        if (topChess[i].point.y + num * width === y && topChess[i].point.x - num * width === x){
+        if (topChess[i].point.index.mulY + num === mulY && topChess[i].point.index.mulX - num === mulX){
             count ++;
             num ++;
         }
@@ -210,7 +209,7 @@ function fourtyFiveCheck (tempCheckChess, type, x, y, width) {
     }
     num = 1;
     for (let i = 0; i < bottomChessLength; i ++) {
-        if (bottomChess[i].point.y - num * width === y && bottomChess[i].point.x + num * width === x){
+        if (bottomChess[i].point.index.mulY - num === mulY && bottomChess[i].point.index.mulX + num === mulX){
             count ++
             num ++
         }
@@ -229,15 +228,15 @@ function fourtyFiveCheck (tempCheckChess, type, x, y, width) {
     }
 }
 
-function oneHundredAndThirtyFiveCheck (tempCheckChess, type, x, y, width) {
+function oneHundredAndThirtyFiveCheck (tempCheckChess, type, mulX, mulY) {
     let count = 1;
-    const topChess = tempCheckChess.filter(e => e.point.y < y).sort((pre, cur) => pre.point.y - cur.point.y);
-    const bottomChess = tempCheckChess.filter(e => e.point.y > y).sort((pre, cur) => pre.point.y - cur.point.y);
+    const topChess = tempCheckChess.filter(e => e.point.index.mulY < mulY).sort((pre, cur) => pre.point.index.mulY - cur.point.index.mulY);
+    const bottomChess = tempCheckChess.filter(e => e.point.index.mulY > mulY).sort((pre, cur) => pre.point.index.mulY - cur.point.index.mulY);
     const topChessLength = topChess.length;
     const bottomChessLength = bottomChess.length;
     let num = 1;
     for (let i = topChessLength - 1; i >= 0; i --) {
-        if (topChess[i].point.y + num * width === y && topChess[i].point.x + num * width === x){
+        if (topChess[i].point.index.mulY + num === mulY && topChess[i].point.index.mulX + num === mulX){
             count ++;
             num ++;
         }
@@ -245,7 +244,7 @@ function oneHundredAndThirtyFiveCheck (tempCheckChess, type, x, y, width) {
     }
     num = 1;
     for (let i = 0; i < bottomChessLength; i ++) {
-        if (bottomChess[i].point.y - num * width === y && bottomChess[i].point.x - num * width === x){
+        if (bottomChess[i].point.index.mulY - num === mulY && bottomChess[i].point.index.mulX - num === mulX){
             count ++
             num ++
         }
