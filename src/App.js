@@ -1,50 +1,74 @@
-import React from 'react';
-import { WingBlank, TabBar } from 'antd-mobile';
-import Weather from './pages/weather'
-import MyMap from './pages/map'
-import './App.scss'
+import React, { Component } from 'react';
+import {drawBoard} from './lib/drawBoard';
+import {getOffsetPoint} from './lib/tool';
+import {calPoint, addChessRecord, checkWin} from './lib/gobang';
+import './App.css';
 
-class App extends React.Component{
-    state = {
-        selectedTab: 'map',
-        hidden: false,
+class App extends Component {
+  state = {
+    borderWidth: 600,
+    spec: 14,
+    border: 30,
+    chessRecords: [],
+    gameState: {
+      ifEnd: false,
+      winner: null
     }
-    render(){
-        return (
-            <div className="container">
-                <TabBar
-                unselectedTintColor="#949494"
-                tintColor="#9254de"
-                barTintColor="white"
-                hidden={this.state.hidden}
-                >
-                <TabBar.Item
-                    icon={<div className='weather-icon menu-icon'/>}
-                    selectedIcon={<div className='weather-active-icon menu-icon'/>}
-                    title="天气"
-                    key="weather"
-                    selected={this.state.selectedTab === 'weather'}
-                    onPress={() => {this.setState({selectedTab: 'weather'})}}
-                    data-seed="logId1"
-                >
-                    <Weather />
-                </TabBar.Item>
-                <TabBar.Item
-                    title="出行"
-                    key="map"
-                    icon={<div className='map-icon menu-icon'/>
-                    }
-                    selectedIcon={<div className='map-active-icon menu-icon'/>
-                    }
-                    selected={this.state.selectedTab === 'map'}
-                    onPress={() => {this.setState({selectedTab: 'map'})}}
-                    data-seed="logId"
-                >
-                    <MyMap />
-                </TabBar.Item>
-                </TabBar>
-            </div>
-        );
+  }
+  componentDidMount () {
+    this.refs.board.onclick = this.boardClick.bind(this)
+    this.drawBoard_()
+  }
+  componentWillUpdate () {
+    this.drawBoard_()
+  }
+  componentDidUpdate () {
+    const {gameState} = this.state
+    if (gameState.ifEnd) {
+      alert("游戏结束")
+      this.refs.board.onclick = null
     }
+  }
+  drawBoard_ () {
+    const board = this.refs.board
+    const context = board.getContext('2d');
+    const {borderWidth, border, spec, chessRecords} = this.state;
+    const width = (borderWidth - 2 * border) / spec
+    drawBoard(context, borderWidth, border, spec, width, chessRecords)
+  }
+  boardClick (e) {
+    e= e || window.event;
+    const ele = this.refs.board
+    const {chessRecords, borderWidth, border, spec} = this.state
+    const width = (borderWidth - 2 * border) / spec
+    let clickPoint = getOffsetPoint(ele, e)
+    clickPoint = calPoint(clickPoint, width, spec)
+    const {x, y} = clickPoint
+    if (x === 0 || x === 600 || y === 0 || y === 600)
+      return
+    const result = addChessRecord(chessRecords, clickPoint)
+    if (result.success) {
+      const checkResult = checkWin(result.chessRecords, width, spec)
+      if (checkResult.ifEnd) {
+        this.setState({chessRecords: result.chessRecords, gameState: checkResult})
+      } else {
+        this.setState({chessRecords: result.chessRecords})
+      }
+    }
+  }
+  render() {
+    const borderWidth = this.state.borderWidth
+    return (
+      <div className="App">
+        <header>
+          GoBang - AI
+        </header>
+        <section>
+          <canvas ref="board" width={borderWidth} height={borderWidth}></canvas>
+        </section>
+      </div>
+    );
+  }
 }
+
 export default App;
