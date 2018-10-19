@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import {drawBoard} from './lib/drawBoard';
 import {getOffsetPoint} from './lib/tool';
+import {message, Button} from 'antd'
 import {calPoint, addChessRecord, checkWin} from './lib/gobang';
+import bowls from './assets/img/bowls.png'
 import './App.css';
 
 class App extends Component {
@@ -25,7 +27,8 @@ class App extends Component {
   componentDidUpdate () {
     const {gameState} = this.state
     if (gameState.ifEnd) {
-      alert("游戏结束")
+      const msg = `游戏结束,${gameState.winner === 0 ? '黑方' : '白方'}获胜!`
+      message.success(msg)
       this.refs.board.onclick = null
     }
   }
@@ -44,7 +47,7 @@ class App extends Component {
     let clickPoint = getOffsetPoint(ele, e)
     clickPoint = calPoint(clickPoint, width, spec)
     const {x, y} = clickPoint
-    if (x === 0 || x === 600 || y === 0 || y === 600)
+    if (x === 0 || x === borderWidth || y === 0 || y === borderWidth)
       return
     const result = addChessRecord(chessRecords, clickPoint)
     if (result.success) {
@@ -66,6 +69,15 @@ class App extends Component {
         <section>
           <canvas ref="board" width={borderWidth} height={borderWidth}></canvas>
         </section>
+        <footer>
+            <section>
+              <img src={bowls} alt="碗" />
+            </section>
+            <section>
+              <Button type="danger">认输</Button>
+              <Button type="primary">悔棋</Button>
+            </section>
+        </footer>
       </div>
     );
   }

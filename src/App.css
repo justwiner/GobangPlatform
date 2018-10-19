@@ -19,3 +19,19 @@
   box-shadow: grey 0 3px 3px;
   background-color: #eee;
 }
+
+.App > footer {
+  width: 600px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.App > footer img {
+  width: 3vw;
+  height: 3vw;
+}
+
+.App > footer button {
+  margin-left: 2vw;
+}
