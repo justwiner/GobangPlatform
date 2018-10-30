@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import {drawBoard} from './lib/drawBoard';
 import {getOffsetPoint} from './lib/tool';
-import {message, Button} from 'antd'
+import {message} from 'antd'
 import {calPoint, addChessRecord, checkWin} from './lib/gobang';
 import black from './assets/img/black.png'
 import white from './assets/img/white.png'
+import Player from './components/Player'
 import './App.css';
 
 class App extends Component {
@@ -68,13 +69,9 @@ class App extends Component {
           GoBang - AI
         </header>
         <section>
-          <section className="player">
-            <img alt="黑方" src={black}></img>
-          </section>
+          <Player icon={black} />
           <canvas ref="board" width={borderWidth} height={borderWidth}></canvas>
-          <section className="player">
-            <img alt="白方" src={white}></img>
-          </section>
+          <Player icon={white} />
         </section>
         <footer>
             
