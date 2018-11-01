@@ -61,6 +61,12 @@ class App extends Component {
       }
     }
   }
+  blackOnOkFun (obj) {
+    console.log(obj)
+  }
+  whiteOnOkFun (obj) {
+    console.log(obj)
+  }
   render() {
     const borderWidth = this.state.borderWidth
     return (
@@ -69,9 +75,9 @@ class App extends Component {
           GoBang - AI
         </header>
         <section>
-          <Player icon={black} />
+          <Player icon={black} onOkCallBack={this.blackOnOkFun}/>
           <canvas ref="board" width={borderWidth} height={borderWidth}></canvas>
-          <Player icon={white} />
+          <Player icon={white} onOkCallBack={this.whiteOnOkFun}/>
         </section>
         <footer>
             
