@@ -33,15 +33,7 @@
 .App > footer {
   width: 600px;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-}
-
-.App > footer img {
-  width: 3vw;
-  height: 3vw;
-}
-
-.App > footer button {
-  margin-left: 2vw;
+  margin-top: 2vw;
 }
