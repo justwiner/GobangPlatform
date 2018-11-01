@@ -112,6 +112,9 @@ class App extends Component {
 
     }
   }
+  reastartGame = () => {
+    window.location.reload()
+  }
   render() {
     const borderWidth = this.state.borderWidth
     const {currentPlayer, readyButtonShow, gameState} = this.state
@@ -138,7 +141,7 @@ class App extends Component {
           winner={gameState.winner}/>
         </section>
         <footer>
-          <Button type="danger">重开</Button>
+          <Button type="danger" onClick={this.reastartGame}>重开</Button>
         </footer>
       </div>
     );
