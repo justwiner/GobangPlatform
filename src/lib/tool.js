@@ -32,6 +32,20 @@ function getOffsetPoint (obj, event) {
     }
 }
 
+function setPointXY (point, spec, width) {
+    const {mulX, mulY} = point.index
+    const result = {
+        index: {
+            mulX,
+            mulY
+        },
+        x: (mulX + 1) * width,
+        y: (mulY + 1) * width
+    }
+    return result
+}
+
 export {
-    getOffsetPoint
+    getOffsetPoint,
+    setPointXY
 }

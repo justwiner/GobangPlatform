@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import {drawBoard} from './lib/drawBoard';
-import {} from './lib/tool';
+import {setPointXY} from './lib/tool';
 import {message, Button} from 'antd'
-import {checkWin, personClick, addChessRecord} from './lib/gobang';
+import {checkWin, personClick, addChessRecord, AIThink, calPoint} from './lib/gobang';
 import black from './assets/img/black.png'
 import white from './assets/img/white.png'
 import Player from './components/Player'
@@ -29,7 +29,7 @@ class App extends Component {
     this.drawBoard_()
   }
   componentWillUpdate (nextProps, nextState) {
-    const {currentPlayer, blackObj, whiteObj} = nextState
+    const {currentPlayer, blackObj, whiteObj, chessRecords, spec} = nextState
     let currentPlayerObj = {}
     if (currentPlayer === "white") {
       currentPlayerObj = whiteObj
@@ -37,7 +37,13 @@ class App extends Component {
       currentPlayerObj = blackObj
     }
     if (currentPlayerObj.player === 2) {
-      console.log(`${currentPlayer} AI开始思考 <url: ${currentPlayerObj.url}>`)
+      // console.log(`${currentPlayer} AI开始思考 <url: ${currentPlayerObj.url}>`)
+      const nextPlayer = currentPlayer === "black" ? "white" : "black"
+      let point = AIThink(chessRecords, spec, currentPlayerObj)
+      const width = this.getWidth()
+      point = calPoint(setPointXY(point, spec, width), width, spec)
+      const result = addChessRecord(chessRecords, point)
+      this.boardCheckWin(result, width, spec, nextPlayer)
     }
     this.drawBoard_()
   }
@@ -68,7 +74,7 @@ class App extends Component {
     if (ifNotAI) {
       e= e || window.event;
       const ele = this.refs.board
-      const width = (borderWidth - 2 * border) / spec
+      const width = this.getWidth()
       const clickPoint = personClick(width, borderWidth, border, spec, ele, e)
       const result = addChessRecord(chessRecords, clickPoint)
       this.boardCheckWin(result, width, spec, nextPlayer)
@@ -111,10 +117,6 @@ class App extends Component {
   ifStartGame = (balck, white) => {
     if (balck && white) {
       const {blackObj, whiteObj} = this.state
-      console.log({
-        blackObj,
-        whiteObj
-      })
       this.setState({readyButtonShow: false, currentPlayer: "black"})
       if (blackObj.player === 0 && whiteObj.player === 0) {
         
@@ -137,6 +139,10 @@ class App extends Component {
         this.setState({chessRecords: result.chessRecords, currentPlayer: nextPlayer})
       }
     }
+  }
+  getWidth = () => {
+    const {borderWidth, border, spec} = this.state
+    return (borderWidth - 2 * border) / spec
   }
   render() {
     const borderWidth = this.state.borderWidth

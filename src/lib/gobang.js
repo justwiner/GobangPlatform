@@ -116,6 +116,12 @@ function checkWin (chessRecords = []) {
             return result
         }
 
+        if (length === 225) {
+            return {
+                ifEnd: true,
+                winner: null
+            };
+        }
         return {
             ifEnd: false,
             winner: null
@@ -273,13 +279,51 @@ function personClick (width, borderWidth, border, spec, ele, e) {
     return clickPoint
 }
 
-function AIThink () {
+function pointIfExist (chessRecords, point) {
+    const {mulX, mulY} = point.index
+    let ifExist = false
+    for (let i = 0 ; i < chessRecords.length; i ++) {
+        if (mulX === chessRecords[i].point.index.mulX && mulY === chessRecords[i].point.index.mulY) {
+            ifExist = true;
+            break
+        }
+    }
+    return ifExist;
+}
 
+function AIThink (chessRecords, spec, AIObj) {
+    // console.log({
+    //     chessRecords,
+    //     spec,
+    //     AIObj
+    // })
+    let mulX = ""
+    let mulY = ""
+    let ifExist = false
+    while (!ifExist) {
+        mulX = Math.round(Math.random() * spec)
+        mulY = Math.round(Math.random() * spec)
+        ifExist = pointIfExist (chessRecords, {
+            index: {
+                mulX, mulY
+            }
+        })
+        ifExist = (!ifExist) ? true : false;
+    }
+    let result = {}
+    result = {
+        index: {
+            mulX,
+            mulY
+        }
+    }
+    return result;
 }
 
 export {
     calPoint,
     addChessRecord,
     checkWin,
-    personClick
+    personClick,
+    AIThink
 }
