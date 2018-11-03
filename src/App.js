@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import {drawBoard} from './lib/drawBoard';
-import {getOffsetPoint} from './lib/tool';
+import {} from './lib/tool';
 import {message, Button} from 'antd'
-import {calPoint, addChessRecord, checkWin} from './lib/gobang';
+import {checkWin, personClick, addChessRecord} from './lib/gobang';
 import black from './assets/img/black.png'
 import white from './assets/img/white.png'
 import Player from './components/Player'
@@ -28,7 +28,17 @@ class App extends Component {
   componentDidMount () {
     this.drawBoard_()
   }
-  componentWillUpdate () {
+  componentWillUpdate (nextProps, nextState) {
+    const {currentPlayer, blackObj, whiteObj} = nextState
+    let currentPlayerObj = {}
+    if (currentPlayer === "white") {
+      currentPlayerObj = whiteObj
+    } else {
+      currentPlayerObj = blackObj
+    }
+    if (currentPlayerObj.player === 2) {
+      console.log(`${currentPlayer} AI开始思考 <url: ${currentPlayerObj.url}>`)
+    }
     this.drawBoard_()
   }
   componentDidUpdate () {
@@ -47,24 +57,23 @@ class App extends Component {
     drawBoard(context, borderWidth, border, spec, width, chessRecords)
   }
   boardClick (e) {
-    e= e || window.event;
-    const ele = this.refs.board
-    let {chessRecords, borderWidth, border, spec, currentPlayer} = this.state
-    const width = (borderWidth - 2 * border) / spec
-    let clickPoint = getOffsetPoint(ele, e)
-    clickPoint = calPoint(clickPoint, width, spec)
-    const {x, y} = clickPoint
-    if (x === 0 || x === borderWidth || y === 0 || y === borderWidth)
-      return
-    const result = addChessRecord(chessRecords, clickPoint)
-    currentPlayer = currentPlayer === "black" ? "white" : "black"
-    if (result.success) {
-      const checkResult = checkWin(result.chessRecords, width, spec)
-      if (checkResult.ifEnd) {
-        this.setState({chessRecords: result.chessRecords, gameState: checkResult, currentPlayer: ""})
-      } else {
-        this.setState({chessRecords: result.chessRecords, currentPlayer})
-      }
+    let {chessRecords, borderWidth, border, spec, currentPlayer, blackObj, whiteObj} = this.state
+    const nextPlayer = currentPlayer === "black" ? "white" : "black"
+    let ifNotAI = false
+    if (currentPlayer === "white") {
+      ifNotAI = (whiteObj.player === 1)
+    } else {
+      ifNotAI = (blackObj.player === 1)
+    }
+    if (ifNotAI) {
+      e= e || window.event;
+      const ele = this.refs.board
+      const width = (borderWidth - 2 * border) / spec
+      const clickPoint = personClick(width, borderWidth, border, spec, ele, e)
+      const result = addChessRecord(chessRecords, clickPoint)
+      this.boardCheckWin(result, width, spec, nextPlayer)
+    } else {
+
     }
   }
   blackOnOkFun = (obj) => {
@@ -107,13 +116,27 @@ class App extends Component {
         whiteObj
       })
       this.setState({readyButtonShow: false, currentPlayer: "black"})
-      this.refs.board.onclick = this.boardClick.bind(this)
+      if (blackObj.player === 0 && whiteObj.player === 0) {
+        
+      } else {
+        this.refs.board.onclick = this.boardClick.bind(this)
+      }
     } else {
 
     }
   }
   reastartGame = () => {
     window.location.reload()
+  }
+  boardCheckWin = (result, width, spec, nextPlayer) => {
+    if (result.success) {
+      const checkResult = checkWin(result.chessRecords, width, spec)
+      if (checkResult.ifEnd) {
+        this.setState({chessRecords: result.chessRecords, gameState: checkResult, currentPlayer: ""})
+      } else {
+        this.setState({chessRecords: result.chessRecords, currentPlayer: nextPlayer})
+      }
+    }
   }
   render() {
     const borderWidth = this.state.borderWidth

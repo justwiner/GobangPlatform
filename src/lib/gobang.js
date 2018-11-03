@@ -1,3 +1,4 @@
+import {getOffsetPoint} from './tool'
 
 function calPoint (point, width, spec) {
     let {x, y} = point
@@ -263,8 +264,22 @@ function oneHundredAndThirtyFiveCheck (tempCheckChess, type, mulX, mulY) {
     }
 }
 
+function personClick (width, borderWidth, border, spec, ele, e) {
+    let clickPoint = getOffsetPoint(ele, e)
+    clickPoint = calPoint(clickPoint, width, spec)
+    const {x, y} = clickPoint
+    if (x === 0 || x === borderWidth || y === 0 || y === borderWidth)
+      return
+    return clickPoint
+}
+
+function AIThink () {
+
+}
+
 export {
     calPoint,
     addChessRecord,
-    checkWin
+    checkWin,
+    personClick
 }
