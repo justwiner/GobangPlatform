@@ -40,8 +40,10 @@ class App extends Component {
       // console.log(`${currentPlayer} AI开始思考 <url: ${currentPlayerObj.url}>`)
       const nextPlayer = currentPlayer === "black" ? "white" : "black"
       let point = AIThink(chessRecords, spec, currentPlayerObj)
+      console.log(point)
       const width = this.getWidth()
       point = calPoint(setPointXY(point, spec, width), width, spec)
+      console.log(point)
       const result = addChessRecord(chessRecords, point)
       this.boardCheckWin(result, width, spec, nextPlayer)
     }

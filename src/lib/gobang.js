@@ -167,8 +167,8 @@ function transverseCheck (tempCheckChess, type, mulX) {
 
 function portraitCheck (tempCheckChess, type, mulY) {
     let count = 1;
-    const topChess = tempCheckChess.filter(e => e.point.index.mulY < mulY).sort((pre, cur) => pre.point.mulY - cur.point.mulY);
-    const bottomChess = tempCheckChess.filter(e => e.point.index.mulY > mulY).sort((pre, cur) => pre.point.mulY - cur.point.mulY);
+    const topChess = tempCheckChess.filter(e => e.point.index.mulY < mulY).sort((pre, cur) => (pre.point.index.mulY - cur.point.index.mulY));
+    const bottomChess = tempCheckChess.filter(e => e.point.index.mulY > mulY).sort((pre, cur) => (pre.point.index.mulY - cur.point.index.mulY));
     const topChessLength = topChess.length;
     const bottomChessLength = bottomChess.length;
     let num = 1;
@@ -283,7 +283,7 @@ function pointIfExist (chessRecords, point) {
     const {mulX, mulY} = point.index
     let ifExist = false
     for (let i = 0 ; i < chessRecords.length; i ++) {
-        if (mulX === chessRecords[i].point.index.mulX && mulY === chessRecords[i].point.index.mulY) {
+        if ((mulX === (chessRecords[i].point.index.mulX - 1)) && (mulY === chessRecords[i].point.index.mulY - 1)) {
             ifExist = true;
             break
         }
@@ -301,14 +301,14 @@ function AIThink (chessRecords, spec, AIObj) {
     let mulY = ""
     let ifExist = false
     while (!ifExist) {
-        mulX = Math.round(Math.random() * spec)
-        mulY = Math.round(Math.random() * spec)
+        mulX = Math.floor(Math.random() * spec + 1)
+        mulY = Math.floor(Math.random() * spec + 1)
         ifExist = pointIfExist (chessRecords, {
             index: {
                 mulX, mulY
             }
         })
-        ifExist = (!ifExist) ? true : false;
+        ifExist = !ifExist
     }
     let result = {}
     result = {
