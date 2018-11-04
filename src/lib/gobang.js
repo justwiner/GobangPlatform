@@ -300,9 +300,10 @@ function AIThink (chessRecords, spec, AIObj) {
     let mulX = ""
     let mulY = ""
     let ifExist = false
+    debugger;
     while (!ifExist) {
-        mulX = Math.floor(Math.random() * spec + 1)
-        mulY = Math.floor(Math.random() * spec + 1)
+        mulX = Math.floor(Math.random() * (spec + 1))
+        mulY = Math.floor(Math.random() * (spec + 1))
         ifExist = pointIfExist (chessRecords, {
             index: {
                 mulX, mulY
