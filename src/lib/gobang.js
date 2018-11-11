@@ -291,16 +291,47 @@ function pointIfExist (chessRecords, point) {
     return ifExist;
 }
 
+function createArray (chessRecords = [], spec) {
+    let boardArray = initArray(spec);
+    for (let i = 0; i <= spec; i ++) {
+        let temp = chessRecords.filter(item => item.point.index.mulY === (i + 1))
+        let length = temp.length;
+        for (let j = 0; j <= spec; j ++) {
+            for (let chessIndex = 0; chessIndex < length; chessIndex ++) {
+                if ((temp[chessIndex].point.index.mulX - 1) === j) {
+                    if (temp[chessIndex].type === 0) {
+                        boardArray[i][j] = 1
+                    } else {
+                        boardArray[i][j] = -1
+                    }
+                }
+            }
+        }
+    }
+    return boardArray;
+}
+
+function initArray (spec) {
+    let result = [];
+    for(let i = 0 ; i < spec; i ++) {
+        let row = []
+        for(let j = 0 ; j < spec; j ++) {
+            row.push(0)
+        }
+        result.push(row)
+    }
+    return result;
+}
+
 function AIThink (chessRecords, spec, AIObj) {
-    // console.log({
-    //     chessRecords,
-    //     spec,
-    //     AIObj
-    // })
+    console.log({
+        array: createArray(chessRecords, spec),
+        spec,
+        AIObj
+    })
     let mulX = ""
     let mulY = ""
     let ifExist = false
-    debugger;
     while (!ifExist) {
         mulX = Math.floor(Math.random() * (spec + 1))
         mulY = Math.floor(Math.random() * (spec + 1))
