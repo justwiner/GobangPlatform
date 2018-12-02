@@ -1,3 +1,4 @@
+// 绘制棋盘所需要的函数
 function drawBoard(context, borderWidth, border, spec, width, chessRecords) {
     context.fillRect(30, 30, 0, 0);
     // 绘制线条
@@ -81,6 +82,7 @@ function drawBoard(context, borderWidth, border, spec, width, chessRecords) {
         })
     });
 }
+// 绘制线条
 function drawLine(context, options) {
     context.moveTo(options.start.x, options.start.y);
     context.lineTo(options.end.x, options.end.y);
@@ -88,6 +90,7 @@ function drawLine(context, options) {
         context.strokeStyle = options.strokeColor;
     context.stroke();
 }
+// 绘制棋子
 function drawCircle(context, options) {
     context.beginPath();
     context.arc(options.point.x, options.point.y, options.width, 0, 2 * Math.PI, true);

@@ -29,21 +29,23 @@ class App extends Component {
     this.drawBoard_()
   }
   componentWillUpdate (nextProps, nextState) {
-    const {currentPlayer, blackObj, whiteObj, chessRecords, spec} = nextState
-    let currentPlayerObj = {}
-    if (currentPlayer === "white") {
-      currentPlayerObj = whiteObj
-    } else {
-      currentPlayerObj = blackObj
-    }
-    if (currentPlayerObj.player === 2) {
-      // console.log(`${currentPlayer} AI开始思考 <url: ${currentPlayerObj.url}>`)
-      const nextPlayer = currentPlayer === "black" ? "white" : "black"
-      let point = AIThink(chessRecords, spec, currentPlayerObj)
-      const width = this.getWidth()
-      point = calPoint(setPointXY(point, spec, width), width, spec)
-      const result = addChessRecord(chessRecords, point)
-      this.boardCheckWin(result, width, spec, nextPlayer)
+    const {currentPlayer, blackObj, whiteObj, chessRecords, spec, gameState} = nextState
+    if (!gameState.ifEnd) {
+      let currentPlayerObj = {}
+      if (currentPlayer === "white") {
+        currentPlayerObj = whiteObj
+      } else {
+        currentPlayerObj = blackObj
+      }
+      if (currentPlayerObj.player === 2) {
+        // console.log(`${currentPlayer} AI开始思考 <url: ${currentPlayerObj.url}>`)
+        const nextPlayer = currentPlayer === "black" ? "white" : "black"
+        let point = AIThink(chessRecords, spec, currentPlayerObj)
+        const width = this.getWidth()
+        point = calPoint(setPointXY(point, spec, width), width, spec)
+        const result = addChessRecord(chessRecords, point)
+        this.boardCheckWin(result, width, spec, nextPlayer)
+      }
     }
     this.drawBoard_()
   }

@@ -1,3 +1,6 @@
+// 工具库
+
+// 获取相对棋盘上部的距离
 function getOffsetTop(obj){
     let tmp = obj.offsetTop;
     let val = obj.offsetParent;
@@ -7,6 +10,8 @@ function getOffsetTop(obj){
     }
     return tmp;
 }
+
+// 获取相对棋盘左侧的距离
 function getOffsetLeft(obj){
     let tmp = obj.offsetLeft;
     let val = obj.offsetParent;
@@ -17,6 +22,7 @@ function getOffsetLeft(obj){
     return tmp;
 }
 
+// 获取相对坐标
 function getOffsetPoint (obj, event) {
     let objTop = getOffsetTop(obj);//对象x位置
     let objLeft = getOffsetLeft(obj);//对象y位置
@@ -32,6 +38,7 @@ function getOffsetPoint (obj, event) {
     }
 }
 
+// 将坐标转换为二维数组的下标
 function setPointXY (point, spec, width) {
     const {mulX, mulY} = point.index
     const result = {

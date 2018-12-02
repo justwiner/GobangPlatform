@@ -1,5 +1,8 @@
+// 五子棋平台共用逻辑函数
+
 import {getOffsetPoint} from './tool'
 
+// 根据点击位置的坐标（相对棋盘左上角），计算出目标下子位置
 function calPoint (point, width, spec) {
     let {x, y} = point
     const remainDerX = x % width
@@ -19,6 +22,7 @@ function calPoint (point, width, spec) {
     return {x,y, index: {mulX, mulY}}
 }
 
+// 将落子记录添加到总记录中，用于棋盘的渲染
 function addChessRecord (chessRecords = [], point) {
     const length = chessRecords.length
     if (length === 0) {
@@ -57,6 +61,7 @@ function addChessRecord (chessRecords = [], point) {
     }
 }
 
+// 检查棋局是否结束总函数
 function checkWin (chessRecords = []) {
     const length = chessRecords.length;
     if (length < 9) {
@@ -130,6 +135,7 @@ function checkWin (chessRecords = []) {
     
 }
 
+// 检查是否具有横向获胜条件
 function transverseCheck (tempCheckChess, type, mulX) {
     let count = 1;
     const leftChess = tempCheckChess.filter(e => e.point.index.mulX < mulX).sort((pre, cur) => pre.point.index.mulX - cur.point.index.mulX);
@@ -165,6 +171,7 @@ function transverseCheck (tempCheckChess, type, mulX) {
     }
 }
 
+// 检查是否具有纵向获胜条件
 function portraitCheck (tempCheckChess, type, mulY) {
     let count = 1;
     const topChess = tempCheckChess.filter(e => e.point.index.mulY < mulY).sort((pre, cur) => (pre.point.index.mulY - cur.point.index.mulY));
@@ -200,6 +207,7 @@ function portraitCheck (tempCheckChess, type, mulY) {
     }
 }
 
+// 检查是否具有顺时针45°获胜条件
 function fourtyFiveCheck (tempCheckChess, type, mulX, mulY) {
     let count = 1;
     const topChess = tempCheckChess.filter(e => e.point.index.mulY < mulY).sort((pre, cur) => pre.point.index.mulY - cur.point.index.mulY);
@@ -235,6 +243,7 @@ function fourtyFiveCheck (tempCheckChess, type, mulX, mulY) {
     }
 }
 
+// 检查是否具有顺时针135°获胜条件
 function oneHundredAndThirtyFiveCheck (tempCheckChess, type, mulX, mulY) {
     let count = 1;
     const topChess = tempCheckChess.filter(e => e.point.index.mulY < mulY).sort((pre, cur) => pre.point.index.mulY - cur.point.index.mulY);
@@ -270,6 +279,7 @@ function oneHundredAndThirtyFiveCheck (tempCheckChess, type, mulX, mulY) {
     }
 }
 
+// 获取用户想要点击的位置
 function personClick (width, borderWidth, border, spec, ele, e) {
     let clickPoint = getOffsetPoint(ele, e)
     clickPoint = calPoint(clickPoint, width, spec)
@@ -279,6 +289,7 @@ function personClick (width, borderWidth, border, spec, ele, e) {
     return clickPoint
 }
 
+// 模拟AI落子辅助函数-此落点是否存在
 function pointIfExist (chessRecords, point) {
     const {mulX, mulY} = point.index
     let ifExist = false
@@ -291,6 +302,7 @@ function pointIfExist (chessRecords, point) {
     return ifExist;
 }
 
+// 根据落子记录，构建棋盘二维数组布局
 function createArray (chessRecords = [], spec) {
     let boardArray = initArray(spec);
     for (let i = 0; i <= spec; i ++) {
@@ -311,11 +323,12 @@ function createArray (chessRecords = [], spec) {
     return boardArray;
 }
 
+// 初始化空棋盘二维数组
 function initArray (spec) {
     let result = [];
-    for(let i = 0 ; i < spec; i ++) {
+    for(let i = 0 ; i <= spec; i ++) {
         let row = []
-        for(let j = 0 ; j < spec; j ++) {
+        for(let j = 0 ; j <= spec; j ++) {
             row.push(0)
         }
         result.push(row)
@@ -323,6 +336,7 @@ function initArray (spec) {
     return result;
 }
 
+// 由AI思考落子位置
 function AIThink (chessRecords, spec, AIObj) {
     console.log({
         array: createArray(chessRecords, spec),
