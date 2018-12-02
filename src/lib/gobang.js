@@ -1,6 +1,7 @@
 // 五子棋平台共用逻辑函数
 
 import {getOffsetPoint} from './tool'
+import axios from 'axios'
 
 // 根据点击位置的坐标（相对棋盘左上角），计算出目标下子位置
 function calPoint (point, width, spec) {
@@ -289,18 +290,7 @@ function personClick (width, borderWidth, border, spec, ele, e) {
     return clickPoint
 }
 
-// 模拟AI落子辅助函数-此落点是否存在
-function pointIfExist (chessRecords, point) {
-    const {mulX, mulY} = point.index
-    let ifExist = false
-    for (let i = 0 ; i < chessRecords.length; i ++) {
-        if ((mulX === (chessRecords[i].point.index.mulX - 1)) && (mulY === chessRecords[i].point.index.mulY - 1)) {
-            ifExist = true;
-            break
-        }
-    }
-    return ifExist;
-}
+
 
 // 根据落子记录，构建棋盘二维数组布局
 function createArray (chessRecords = [], spec) {
@@ -337,32 +327,12 @@ function initArray (spec) {
 }
 
 // 由AI思考落子位置
-function AIThink (chessRecords, spec, AIObj) {
-    console.log({
+async function AIThink (chessRecords, spec, AIObj) {
+    let result = (await axios.post(AIObj.url, {
         array: createArray(chessRecords, spec),
         spec,
-        AIObj
-    })
-    let mulX = ""
-    let mulY = ""
-    let ifExist = false
-    while (!ifExist) {
-        mulX = Math.floor(Math.random() * (spec + 1))
-        mulY = Math.floor(Math.random() * (spec + 1))
-        ifExist = pointIfExist (chessRecords, {
-            index: {
-                mulX, mulY
-            }
-        })
-        ifExist = !ifExist
-    }
-    let result = {}
-    result = {
-        index: {
-            mulX,
-            mulY
-        }
-    }
+        chessRecords
+    })).data
     return result;
 }
 

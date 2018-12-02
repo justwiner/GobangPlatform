@@ -28,7 +28,7 @@ class App extends Component {
   componentDidMount () {
     this.drawBoard_()
   }
-  componentWillUpdate (nextProps, nextState) {
+  async componentWillUpdate (nextProps, nextState) {
     const {currentPlayer, blackObj, whiteObj, chessRecords, spec, gameState} = nextState
     if (!gameState.ifEnd) {
       let currentPlayerObj = {}
@@ -40,7 +40,7 @@ class App extends Component {
       if (currentPlayerObj.player === 2) {
         // console.log(`${currentPlayer} AI开始思考 <url: ${currentPlayerObj.url}>`)
         const nextPlayer = currentPlayer === "black" ? "white" : "black"
-        let point = AIThink(chessRecords, spec, currentPlayerObj)
+        let point = await AIThink(chessRecords, spec, currentPlayerObj)
         const width = this.getWidth()
         point = calPoint(setPointXY(point, spec, width), width, spec)
         const result = addChessRecord(chessRecords, point)
