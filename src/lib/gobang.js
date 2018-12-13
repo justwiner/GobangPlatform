@@ -302,9 +302,9 @@ function createArray (chessRecords = [], spec) {
             for (let chessIndex = 0; chessIndex < length; chessIndex ++) {
                 if ((temp[chessIndex].point.index.mulX - 1) === j) {
                     if (temp[chessIndex].type === 0) {
-                        boardArray[i][j] = 1
+                        boardArray[i][j] = 2
                     } else {
-                        boardArray[i][j] = -1
+                        boardArray[i][j] = 1
                     }
                 }
             }
@@ -333,6 +333,7 @@ async function AIThink (chessRecords, spec, AIObj) {
         spec,
         chessRecords
     })).data
+    console.log(result)
     return result;
 }
 
