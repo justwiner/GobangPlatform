@@ -28,8 +28,19 @@ class App extends Component {
   componentDidMount () {
     this.drawBoard_()
   }
-  async componentWillUpdate (nextProps, nextState) {
-    const {currentPlayer, blackObj, whiteObj, chessRecords, spec, gameState} = nextState
+  // async componentWillUpdate (nextProps, nextState) {
+  //   const {currentPlayer, blackObj, whiteObj, chessRecords, spec, gameState} = nextState
+  //   await this.ItsAIThink(currentPlayer, blackObj, whiteObj, chessRecords, spec, gameState)
+  // }
+  componentDidUpdate () {
+    const {gameState} = this.state
+    if (gameState.ifEnd) {
+      const msg = `游戏结束,${gameState.winner === 0 ? '黑方' : '白方'}获胜!`
+      message.success(msg)
+      this.refs.board.onclick = null
+    }
+  }
+  ItsAIThink = async (currentPlayer, blackObj, whiteObj, chessRecords, spec, gameState) => {
     if (!gameState.ifEnd) {
       let currentPlayerObj = {}
       if (currentPlayer === "white") {
@@ -38,7 +49,7 @@ class App extends Component {
         currentPlayerObj = blackObj
       }
       if (currentPlayerObj.player === 2) {
-        // console.log(`${currentPlayer} AI开始思考 <url: ${currentPlayerObj.url}>`)
+        console.log(`${currentPlayer} AI开始思考 <url: ${currentPlayerObj.url}>`)
         const nextPlayer = currentPlayer === "black" ? "white" : "black"
         let point = await AIThink(chessRecords, spec, currentPlayerObj)
         const width = this.getWidth()
@@ -48,21 +59,6 @@ class App extends Component {
       }
     }
     this.drawBoard_()
-  }
-  componentDidUpdate () {
-    const {gameState} = this.state
-    if (gameState.ifEnd) {
-      const msg = `游戏结束,${gameState.winner === 0 ? '黑方' : '白方'}获胜!`
-      message.success(msg)
-      this.refs.board.onclick = null
-    }
-  }
-  drawBoard_ () {
-    const board = this.refs.board
-    const context = board.getContext('2d');
-    const {borderWidth, border, spec, chessRecords} = this.state;
-    const width = (borderWidth - 2 * border) / spec
-    drawBoard(context, borderWidth, border, spec, width, chessRecords)
   }
   boardClick (e) {
     let {chessRecords, borderWidth, border, spec, currentPlayer, blackObj, whiteObj} = this.state
@@ -79,10 +75,52 @@ class App extends Component {
       const width = this.getWidth()
       const clickPoint = personClick(width, borderWidth, border, spec, ele, e)
       const result = addChessRecord(chessRecords, clickPoint)
+      this.drawBoard_()
       this.boardCheckWin(result, width, spec, nextPlayer)
-    } else {
-
     }
+  }
+  ifStartGame = (balck, white) => {
+    if (balck && white) {
+      const {blackObj, whiteObj} = this.state
+      this.setState({readyButtonShow: false, currentPlayer: "black"}, async () => {
+        const {currentPlayer, blackObj, whiteObj, chessRecords, spec, gameState} = this.state
+        await this.ItsAIThink(currentPlayer, blackObj, whiteObj, chessRecords, spec, gameState)
+      })
+      if (blackObj.player === 0 && whiteObj.player === 0) {} else {
+        this.refs.board.onclick = this.boardClick.bind(this)
+      }
+    }
+  }
+  boardCheckWin = async (result, width, spec, nextPlayer) => {
+    if (result.success) {
+      const checkResult = checkWin(result.chessRecords, width, spec)
+      if (checkResult.ifEnd) {
+        this.setState({chessRecords: result.chessRecords, gameState: checkResult, currentPlayer: ""})
+      } else {
+        const {whiteObj, blackObj} = this.state
+        let currentPlayerObj = {}
+        if (nextPlayer === "white") {
+          currentPlayerObj = whiteObj
+        } else {
+          currentPlayerObj = blackObj
+        }
+        if (currentPlayerObj.player === 2) {
+          this.setState({chessRecords: result.chessRecords, currentPlayer: nextPlayer}, async () => {
+            const {currentPlayer, blackObj, whiteObj, chessRecords, spec, gameState} = this.state
+            await this.ItsAIThink(currentPlayer, blackObj, whiteObj, chessRecords, spec, gameState)
+          })
+        } else {
+          this.setState({chessRecords: result.chessRecords, currentPlayer: nextPlayer})
+        }
+      }
+    }
+  }
+  drawBoard_ () {
+    const board = this.refs.board
+    const context = board.getContext('2d');
+    const {borderWidth, border, spec, chessRecords} = this.state;
+    const width = (borderWidth - 2 * border) / spec
+    drawBoard(context, borderWidth, border, spec, width, chessRecords)
   }
   blackOnOkFun = (obj) => {
     if (obj.ready) {
@@ -116,31 +154,8 @@ class App extends Component {
       })
     }
   }
-  ifStartGame = (balck, white) => {
-    if (balck && white) {
-      const {blackObj, whiteObj} = this.state
-      this.setState({readyButtonShow: false, currentPlayer: "black"})
-      if (blackObj.player === 0 && whiteObj.player === 0) {
-        
-      } else {
-        this.refs.board.onclick = this.boardClick.bind(this)
-      }
-    } else {
-
-    }
-  }
   reastartGame = () => {
     window.location.reload()
-  }
-  boardCheckWin = (result, width, spec, nextPlayer) => {
-    if (result.success) {
-      const checkResult = checkWin(result.chessRecords, width, spec)
-      if (checkResult.ifEnd) {
-        this.setState({chessRecords: result.chessRecords, gameState: checkResult, currentPlayer: ""})
-      } else {
-        this.setState({chessRecords: result.chessRecords, currentPlayer: nextPlayer})
-      }
-    }
   }
   getWidth = () => {
     const {borderWidth, border, spec} = this.state

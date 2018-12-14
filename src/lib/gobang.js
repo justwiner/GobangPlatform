@@ -333,7 +333,6 @@ async function AIThink (chessRecords, spec, AIObj) {
         spec,
         chessRecords
     })).data
-    console.log(result)
     return result;
 }
 
