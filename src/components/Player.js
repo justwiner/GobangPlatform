@@ -1,3 +1,7 @@
+/* 
+    本组件用于展示下棋双方状态，包括真人与AI的选择与编辑，当游戏开始之后，双方无法更改信息 
+*/
+
 import React from "react"
 import {Input, Radio, Button,Icon } from 'antd'
 import winImg from '../assets/img/win.png'
@@ -5,16 +9,27 @@ const RadioGroup = Radio.Group;
 
 class Player extends React.Component {
     state = {
-        player: 1,
-        url: '',
-        noChangeAble: false,
-        bottonContext: '准备',
-        bottonType: '',
+        player: 1, // 1 - 真人 ， 2 - AI 
+        url: '', // AI 远程链接
+        noChangeAble: false, // 当前是否允许修改信息
+        bottonContext: '准备', // 按钮文字（准备，取消准备）
+        bottonType: '', // 按钮状态，不同状态不同样式
     }
-    onChangePlayer = (e) => this.setState({player: e.target.value})
-    onChangeUrl = (e) => this.setState({url: e.target.value})
+    onChangePlayer = (e) => this.setState({player: e.target.value}) // 改变玩家属性： 1 - 真人 ， 2 - AI 
+    onChangeUrl = (e) => this.setState({url: e.target.value}) // 改变AI 远程链接
+    // 准备按钮触发事件
     confirmReady = () => {
         const {url, player, bottonContext} = this.state
+        /* 
+            如果点击前状态是准备
+            那么
+            按钮文字 由“准备” -> “取消准备”
+            当前玩家变为 ready：true 状态（父组件使用）
+            单选项变为不可编辑
+            修改样式
+            ...
+            反之同上
+        */
         if (bottonContext === "准备") {
             let obj = {
                 player,
@@ -44,7 +59,9 @@ class Player extends React.Component {
         const {icon} = this.props;
         const {player, url, bottonContext, bottonType, noChangeAble} = this.state
         const {Player, currentPlayer, readyButtonShow, winner} = this.props
+        // 判断是否轮到当前玩家下棋，是则显示思考中字样
         const ifCurrent = (Player === currentPlayer)
+        // 判断是否获胜， 获胜那方将会有奖杯图标显示
         const ifWin = ((Player === "black" ? 0 : 1) === winner)
         return (
             <section className="player">
