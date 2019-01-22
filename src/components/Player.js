@@ -1,5 +1,6 @@
 /* 
-    本组件用于展示下棋双方状态，包括真人与AI的选择与编辑，当游戏开始之后，双方无法更改信息 
+    本组件用于展示下棋双方状态，包括真人与AI的选择与编辑
+    当游戏开始之后，双方无法更改信息 
 */
 
 import React from "react"
@@ -10,13 +11,13 @@ const RadioGroup = Radio.Group;
 class Player extends React.Component {
     state = {
         player: 1, // 1 - 真人 ， 2 - AI 
-        url: '', // AI 远程链接
+        url: '', // AI 远程链接地址
         noChangeAble: false, // 当前是否允许修改信息
         bottonContext: '准备', // 按钮文字（准备，取消准备）
         bottonType: '', // 按钮状态，不同状态不同样式
     }
     onChangePlayer = (e) => this.setState({player: e.target.value}) // 改变玩家属性： 1 - 真人 ， 2 - AI 
-    onChangeUrl = (e) => this.setState({url: e.target.value}) // 改变AI 远程链接
+    onChangeUrl = (e) => this.setState({url: e.target.value}) // 改变AI 远程链接地址
     // 准备按钮触发事件
     confirmReady = () => {
         const {url, player, bottonContext} = this.state
