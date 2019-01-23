@@ -5,8 +5,8 @@
  * @param {*} borderWidth 棋盘总宽度
  * @param {*} border 格子快度
  * @param {*} spec 每行的格子个数
- * @param {*} width
- * @param {*} chessRecords
+ * @param {*} width 每个格子空白部分的宽度，即去除一个格子的边框的宽度
+ * @param {*} chessRecords 落子记录
  */
 function drawBoard(context, borderWidth, border, spec, width, chessRecords) {
     context.fillRect(30, 30, 0, 0);
@@ -91,7 +91,12 @@ function drawBoard(context, borderWidth, border, spec, width, chessRecords) {
         })
     });
 }
-// 封装->绘制线条
+
+/**
+ * 封装->绘制线条
+ * @param {*} context canvas对象上下文
+ * @param {*} options 线条属性（起点坐标、终点坐标、颜色）
+ */
 function drawLine(context, options) {
     // 绘制起点
     context.moveTo(options.start.x, options.start.y);
@@ -103,7 +108,12 @@ function drawLine(context, options) {
     // 以笔触(类似笔一样，画路径)的方式绘制， fill()方法为填充
     context.stroke();
 }
-// 封装->绘制棋子
+
+/**
+ * 封装->绘制棋子
+ * @param {*} context canvas对象上下文
+ * @param {*} options 棋子属性（圆心坐标、半径、填充颜色、类型（黑棋、白棋）、画笔颜色）
+ */
 function drawCircle(context, options) {
     // 清除之前所有的画笔设置
     context.beginPath();
