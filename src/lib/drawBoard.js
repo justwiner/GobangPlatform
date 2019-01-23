@@ -1,4 +1,13 @@
-// 绘制棋盘所需要的函数
+/**
+ *
+ * 绘制棋盘所需要的函数
+ * @param {*} context canvas对象上下文
+ * @param {*} borderWidth 棋盘总宽度
+ * @param {*} border 格子快度
+ * @param {*} spec 每行的格子个数
+ * @param {*} width
+ * @param {*} chessRecords
+ */
 function drawBoard(context, borderWidth, border, spec, width, chessRecords) {
     context.fillRect(30, 30, 0, 0);
     // 绘制线条
