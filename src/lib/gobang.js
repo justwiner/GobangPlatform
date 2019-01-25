@@ -198,29 +198,55 @@ function checkWin (chessRecords = []) {
     
 }
 
-// 检查是否具有横向获胜条件
+
+/**
+ * 检查是否具有横向获胜条件
+ * @param {*} tempCheckChess 同一行的所有棋子列表
+ * @param {*} type 棋手所在方
+ * @param {*} mulX 最后一次落子的横坐标
+ * @returns
+ */
 function transverseCheck (tempCheckChess, type, mulX) {
+    // 默认连接初始值为 1
     let count = 1;
+    // 最后一次落子位置的左侧棋子列表（由大到小的顺序）
     const leftChess = tempCheckChess.filter(e => e.point.index.mulX < mulX).sort((pre, cur) => pre.point.index.mulX - cur.point.index.mulX);
+    // 最后一次落子位置的右侧棋子列表（由大到小的顺序）
     const rightChess = tempCheckChess.filter(e => e.point.index.mulX > mulX).sort((pre, cur) => pre.point.index.mulX - cur.point.index.mulX);
+    // 左侧棋子的数目
     const leftChessLength = leftChess.length;
+    // 右侧棋子的数目
     const rightChessLength = rightChess.length;
+    // 起始横坐标偏移量为 1， 1 - 2 - 3 - 4
     let num = 1;
+    /**
+     * 计算左侧棋子最长连续棋路的数字
+     * 距离落子位置最近的位置
+     * 由右向左遍历
+     */
     for (let i = leftChessLength - 1; i >= 0; i --) {
         if (leftChess[i].point.index.mulX + num === mulX){
             count ++;
             num ++;
         }
+        // 不连续的话就break
         else break;
     }
     num = 1;
+    /**
+     * 计算右侧棋子最长连续棋路的数字
+     * 距离落子位置最近的位置
+     * 由左向右遍历
+     */
     for (let i = 0; i < rightChessLength; i ++) {
         if (rightChess[i].point.index.mulX - num === mulX){
             count ++
             num ++
         }
+        // 不连续的话就break
         else break;
     }
+    // 如果连续棋子数目为5，则游戏结束，并得到胜利者信息
     if (count === 5) {
         return {
             ifEnd: true,
