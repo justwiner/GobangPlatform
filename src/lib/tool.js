@@ -1,6 +1,11 @@
 // 工具库
 
-// 获取相对棋盘上部的距离
+// 
+/**
+ * 获取相对棋盘上部的距离
+ * @param {*} obj
+ * @returns
+ */
 function getOffsetTop(obj){
     let tmp = obj.offsetTop;
     let val = obj.offsetParent;
