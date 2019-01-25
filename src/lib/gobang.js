@@ -353,10 +353,19 @@ function fourtyFiveCheck (tempCheckChess, type, mulX, mulY) {
     }
 }
 
-// 检查是否具有顺时针135°获胜条件
+/**
+ * 检查是否具有顺时针135°获胜条件
+ * @param {*} tempCheckChess 在同一顺时针135°的所有棋子列表
+ * @param {*} type 棋手所在方
+ * @param {*} mulX 落子位置的横坐标
+ * @param {*} mulY 落子位置的纵坐标
+ * @returns 判断结果
+ */
 function oneHundredAndThirtyFiveCheck (tempCheckChess, type, mulX, mulY) {
     let count = 1;
+    // 位于最后一次落子位置左上方的棋子列表（按纵坐标，由大到小排序）
     const topChess = tempCheckChess.filter(e => e.point.index.mulY < mulY).sort((pre, cur) => pre.point.index.mulY - cur.point.index.mulY);
+    // 位于最后一次落子位置右下方的棋子列表（按纵坐标，由大到小排序）
     const bottomChess = tempCheckChess.filter(e => e.point.index.mulY > mulY).sort((pre, cur) => pre.point.index.mulY - cur.point.index.mulY);
     const topChessLength = topChess.length;
     const bottomChessLength = bottomChess.length;
