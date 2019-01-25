@@ -318,7 +318,9 @@ function portraitCheck (tempCheckChess, type, mulY) {
  */
 function fourtyFiveCheck (tempCheckChess, type, mulX, mulY) {
     let count = 1;
+    // 位于最后一次落子位置右上方的棋子列表（按纵坐标，由大到小排序）
     const topChess = tempCheckChess.filter(e => e.point.index.mulY < mulY).sort((pre, cur) => pre.point.index.mulY - cur.point.index.mulY);
+    // 位于最后一次落子位置左下方的棋子列表（按纵坐标，由大到小排序）
     const bottomChess = tempCheckChess.filter(e => e.point.index.mulY > mulY).sort((pre, cur) => pre.point.index.mulY - cur.point.index.mulY);
     const topChessLength = topChess.length;
     const bottomChessLength = bottomChess.length;
