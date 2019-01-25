@@ -204,7 +204,7 @@ function checkWin (chessRecords = []) {
  * @param {*} tempCheckChess 同一行的所有棋子列表
  * @param {*} type 棋手所在方
  * @param {*} mulX 最后一次落子的横坐标
- * @returns
+ * @returns 判断结果
  */
 function transverseCheck (tempCheckChess, type, mulX) {
     // 默认连接初始值为 1
@@ -265,7 +265,7 @@ function transverseCheck (tempCheckChess, type, mulX) {
  * @param {*} tempCheckChess 同一列所有棋子的列表
  * @param {*} type 棋手所在方
  * @param {*} mulY 落子位置的纵坐标
- * @returns
+ * @returns 判断结果
  */
 function portraitCheck (tempCheckChess, type, mulY) {
     // 统计可连续的棋子数目,默认为1
@@ -308,7 +308,14 @@ function portraitCheck (tempCheckChess, type, mulY) {
     }
 }
 
-// 检查是否具有顺时针45°获胜条件
+/**
+ * 检查是否具有顺时针45°获胜条件
+ * @param {*} tempCheckChess 在同一顺时针45°的所有棋子列表
+ * @param {*} type 棋手所在方
+ * @param {*} mulX 落子位置的横坐标
+ * @param {*} mulY 落子位置的纵坐标
+ * @returns 判断结果
+ */
 function fourtyFiveCheck (tempCheckChess, type, mulX, mulY) {
     let count = 1;
     const topChess = tempCheckChess.filter(e => e.point.index.mulY < mulY).sort((pre, cur) => pre.point.index.mulY - cur.point.index.mulY);
