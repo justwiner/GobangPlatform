@@ -260,14 +260,24 @@ function transverseCheck (tempCheckChess, type, mulX) {
     }
 }
 
-// 检查是否具有纵向获胜条件
+/**
+ * 检查是否具有纵向获胜条件
+ * @param {*} tempCheckChess 同一列所有棋子的列表
+ * @param {*} type 棋手所在方
+ * @param {*} mulY 落子位置的纵坐标
+ * @returns
+ */
 function portraitCheck (tempCheckChess, type, mulY) {
+    // 统计可连续的棋子数目,默认为1
     let count = 1;
+    // 最后一次落子的上方棋子列表（由小到大排序）
     const topChess = tempCheckChess.filter(e => e.point.index.mulY < mulY).sort((pre, cur) => (pre.point.index.mulY - cur.point.index.mulY));
+    // 最后一次落子的下方棋子列表（由小到大排序）
     const bottomChess = tempCheckChess.filter(e => e.point.index.mulY > mulY).sort((pre, cur) => (pre.point.index.mulY - cur.point.index.mulY));
     const topChessLength = topChess.length;
     const bottomChessLength = bottomChess.length;
     let num = 1;
+    // 计算最后一次落子位置上方可以连续的棋子数目
     for (let i = topChessLength - 1; i >= 0; i --) {
         if (topChess[i].point.index.mulY + num === mulY){
             count ++;
@@ -276,6 +286,7 @@ function portraitCheck (tempCheckChess, type, mulY) {
         else break;
     }
     num = 1;
+    // 计算最后一次落子位置下方可以连续的棋子数目
     for (let i = 0; i < bottomChessLength; i ++) {
         if (bottomChess[i].point.index.mulY - num === mulY){
             count ++
@@ -283,6 +294,7 @@ function portraitCheck (tempCheckChess, type, mulY) {
         }
         else break;
     }
+    // 可连续的棋子数目为 5 时，即连成 5 子
     if (count === 5) {
         return {
             ifEnd: true,
