@@ -400,19 +400,23 @@ function oneHundredAndThirtyFiveCheck (tempCheckChess, type, mulX, mulY) {
 
 /**
  * 获取用户想要点击的位置
- * @param {*} width
- * @param {*} borderWidth
- * @param {*} spec
- * @param {*} ele
- * @param {*} e
- * @returns
+ * @param {*} width 每隔所占宽度
+ * @param {*} borderWidth 棋盘总宽度
+ * @param {*} spec 棋盘每行格子数目
+ * @param {*} ele 棋盘上下文对象
+ * @param {*} e 点击事件
+ * @returns 计算所得的用户理想落子位置
  */
 function personClick (width, borderWidth, spec, ele, e) {
+    // 获取用户点击位置相对于棋盘左上角的相对坐标
     let clickPoint = getOffsetPoint(ele, e)
+    // 根据用户点击位置的相对坐标，计算最合适的落子位置坐标信息
     clickPoint = calPoint(clickPoint, width, spec)
     const {x, y} = clickPoint
+    // 如果计算出的落子位置坐标在棋盘之外，则不返回信息
     if (x === 0 || x === borderWidth || y === 0 || y === borderWidth)
       return
+    // 反之返回落子位置信息
     return clickPoint
 }
 
