@@ -1,10 +1,9 @@
 // 工具库
 
-// 
 /**
  * 获取相对棋盘上部的距离
- * @param {*} obj
- * @returns
+ * @param {*} obj 棋盘上下文对象
+ * @returns 棋盘距窗口顶部的距离
  */
 function getOffsetTop(obj){
     let tmp = obj.offsetTop;
@@ -16,7 +15,11 @@ function getOffsetTop(obj){
     return tmp;
 }
 
-// 获取相对棋盘左侧的距离
+/**
+ * 获取相对棋盘左侧的距离
+ * @param {*} obj
+ * @returns 棋盘相对窗口左侧的距离
+ */
 function getOffsetLeft(obj){
     let tmp = obj.offsetLeft;
     let val = obj.offsetParent;
@@ -27,7 +30,12 @@ function getOffsetLeft(obj){
     return tmp;
 }
 
-// 获取相对坐标
+/**
+ * 获取相对坐标
+ * @param {*} obj 棋盘上下文对象
+ * @param {*} event 点击事件
+ * @returns 鼠标点击位置相对于棋盘左上角的相对坐标
+ */
 function getOffsetPoint (obj, event) {
     let objTop = getOffsetTop(obj);//对象x位置
     let objLeft = getOffsetLeft(obj);//对象y位置
@@ -44,6 +52,14 @@ function getOffsetPoint (obj, event) {
 }
 
 // 将坐标转换为二维数组的下标
+/**
+ *
+ *
+ * @param {*} point
+ * @param {*} spec
+ * @param {*} width
+ * @returns
+ */
 function setPointXY (point, spec, width) {
     const {mulX, mulY} = point.index
     const result = {
