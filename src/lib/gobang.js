@@ -422,18 +422,34 @@ function personClick (width, borderWidth, spec, ele, e) {
 
 
 
-// 根据落子记录，构建棋盘二维数组布局
+/**
+ * 根据落子记录，构建棋盘二维数组布局
+ * @param {*} [chessRecords=[]] 落子记录列表
+ * @param {*} spec 棋盘每行的格子数目
+ * @returns 返回由二维数组构成的棋盘信息
+ */
 function createArray (chessRecords = [], spec) {
+    // 初始化二维数组
     let boardArray = initArray(spec);
+    // 由于每行空格子spec个，则可落子点数目为 spec+1
     for (let i = 0; i <= spec; i ++) {
+        // 取出当前行的所有棋子
         let temp = chessRecords.filter(item => item.point.index.mulY === (i + 1))
         let length = temp.length;
         for (let j = 0; j <= spec; j ++) {
             for (let chessIndex = 0; chessIndex < length; chessIndex ++) {
                 if ((temp[chessIndex].point.index.mulX - 1) === j) {
                     if (temp[chessIndex].type === 0) {
+                        /**
+                         * type = 0 -> 黑棋
+                         * 二维数组中显示为 2
+                         */
                         boardArray[i][j] = 2
                     } else {
+                        /**
+                         * type = 1 -> 白棋
+                         * 二维数组中显示为 1
+                         */
                         boardArray[i][j] = 1
                     }
                 }
@@ -443,7 +459,11 @@ function createArray (chessRecords = [], spec) {
     return boardArray;
 }
 
-// 初始化空棋盘二维数组
+/**
+ * 初始化空棋盘二维数组
+ * @param {*} spec 棋盘每行的格子数目
+ * @returns 返回全为数字0的二维数组 arr[spec][spec]
+ */
 function initArray (spec) {
     let result = [];
     for(let i = 0 ; i <= spec; i ++) {
@@ -456,9 +476,17 @@ function initArray (spec) {
     return result;
 }
 
-// 由AI思考落子位置
+/**
+ * AI思考落子位置
+ * 即AI接口调用
+ * @param {*} chessRecords 落子记录
+ * @param {*} spec 棋盘每行格子数目
+ * @param {*} AIObj 人机接口相应信息
+ * @returns
+ */
 async function AIThink (chessRecords, spec, AIObj) {
     let result = (await axios.post(AIObj.url, {
+        // 将落子记录转化为二维数组的形式，以参数的方式传给接口
         array: createArray(chessRecords, spec),
         spec,
         chessRecords
