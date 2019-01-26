@@ -398,8 +398,16 @@ function oneHundredAndThirtyFiveCheck (tempCheckChess, type, mulX, mulY) {
     }
 }
 
-// 获取用户想要点击的位置
-function personClick (width, borderWidth, border, spec, ele, e) {
+/**
+ * 获取用户想要点击的位置
+ * @param {*} width
+ * @param {*} borderWidth
+ * @param {*} spec
+ * @param {*} ele
+ * @param {*} e
+ * @returns
+ */
+function personClick (width, borderWidth, spec, ele, e) {
     let clickPoint = getOffsetPoint(ele, e)
     clickPoint = calPoint(clickPoint, width, spec)
     const {x, y} = clickPoint

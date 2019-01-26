@@ -61,7 +61,7 @@ class App extends Component {
     this.drawBoard_()
   }
   boardClick (e) {
-    let {chessRecords, borderWidth, border, spec, currentPlayer, blackObj, whiteObj} = this.state
+    let {chessRecords, borderWidth, spec, currentPlayer, blackObj, whiteObj} = this.state
     const nextPlayer = currentPlayer === "black" ? "white" : "black"
     let ifNotAI = false
     if (currentPlayer === "white") {
@@ -73,7 +73,7 @@ class App extends Component {
       e= e || window.event;
       const ele = this.refs.board
       const width = this.getWidth()
-      const clickPoint = personClick(width, borderWidth, border, spec, ele, e)
+      const clickPoint = personClick(width, borderWidth, spec, ele, e)
       const result = addChessRecord(chessRecords, clickPoint)
       this.drawBoard_()
       this.boardCheckWin(result, width, spec, nextPlayer)
