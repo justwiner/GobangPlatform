@@ -51,10 +51,9 @@ function getOffsetPoint (obj, event) {
     }
 }
 
-// 将坐标转换为二维数组的下标
 /**
- *
- *
+ * 封装坐标信息（point中的坐标信息是二维数组的下标，将其封装并添加实际落子位置属性）
+ * 用于后续处理 （根据点击位置信息，计算出合适的落子位置）
  * @param {*} point
  * @param {*} width
  * @returns
@@ -66,6 +65,7 @@ function setPointXY (point, width) {
             mulX,
             mulY
         },
+        // 根据宽度，计算实际落子位置的相对坐标
         x: (mulX + 1) * width,
         y: (mulY + 1) * width
     }
