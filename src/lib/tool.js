@@ -56,11 +56,10 @@ function getOffsetPoint (obj, event) {
  *
  *
  * @param {*} point
- * @param {*} spec
  * @param {*} width
  * @returns
  */
-function setPointXY (point, spec, width) {
+function setPointXY (point, width) {
     const {mulX, mulY} = point.index
     const result = {
         index: {

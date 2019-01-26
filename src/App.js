@@ -53,7 +53,7 @@ class App extends Component {
         const nextPlayer = currentPlayer === "black" ? "white" : "black"
         let point = await AIThink(chessRecords, spec, currentPlayerObj)
         const width = this.getWidth()
-        point = calPoint(setPointXY(point, spec, width), width, spec)
+        point = calPoint(setPointXY(point, width), width, spec)
         const result = addChessRecord(chessRecords, point)
         this.boardCheckWin(result, width, spec, nextPlayer)
       }
