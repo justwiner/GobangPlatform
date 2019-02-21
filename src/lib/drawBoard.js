@@ -81,14 +81,25 @@ function drawBoard(context, borderWidth, border, spec, width, chessRecords) {
         fillStyle: "black",
         strokeStyle: "black"
     })
+    const length = chessRecords.length
     // 绘制棋子
-    chessRecords.forEach(e => {
-        drawCircle(context, {
-            point: e.point,
-            width: width / 2.5,
-            type: e.type,
-            strokeStyle: e.color
-        })
+    chessRecords.forEach((e, index) => {
+        if (index + 1 !== length) {
+            drawCircle(context, {
+                point: e.point,
+                width: width / 2.5,
+                type: e.type,
+                strokeStyle: e.color
+            })
+        } else {
+            drawCircle(context, {
+                point: e.point,
+                width: width / 2.5,
+                type: e.type,
+                strokeStyle: e.color,
+                ifLatest: true
+            })
+        }
     });
 }
 
@@ -147,6 +158,22 @@ function drawCircle(context, options) {
     context.stroke();
     // 封闭一个图形，无瑕疵
     context.closePath();
+    if (options.ifLatest) {
+        const latestColor = 'red'
+        // 清除之前所有的画笔设置
+        context.beginPath();
+        // 设置画笔颜色
+        context.strokeStyle = latestColor;
+        // 设置填充颜色
+        context.fillStyle = latestColor;
+        // arc(圆心x坐标，圆心y坐标，圆的半径，起始角，结束角，true=逆时针 | false=顺时针)
+        context.arc(options.point.x, options.point.y, options.width/5, 0, 2 * Math.PI, true);
+        // 以填充的方式绘制
+        context.fill();
+        context.stroke();
+        // 封闭一个图形，无瑕疵
+        context.closePath();
+    }
 }
 
 export {
