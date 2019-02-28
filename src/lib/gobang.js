@@ -485,11 +485,19 @@ function initArray (spec) {
  * @returns
  */
 async function AIThink (chessRecords, spec, AIObj) {
+    const chessRecordsLen = chessRecords.length
+    let role = 0
+    if (chessRecordsLen > 0) {
+        role = chessRecords[chessRecordsLen - 1].color === "black" ? 1 : 2
+    } else {
+        role = 2
+    }
     let result = (await axios.post(AIObj.url, {
         // 将落子记录转化为二维数组的形式，以参数的方式传给接口
         array: createArray(chessRecords, spec),
         spec,
-        chessRecords
+        chessRecords,
+        role
     })).data
     return result;
 }
